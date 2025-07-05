@@ -1,0 +1,741 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🜂 The Codex Entangled in Flames</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --divine-gold: #ffd700;
+    --ancient-gold: #e6b800;
+    --ember-glow: #ff6b35;
+    --flame-heart: #ff4500;
+    --copper-dream: #cd7f32;
+    --bronze-whisper: #8b4513;
+    --midnight-velvet: #0a0a0a;
+    --shadow-silk: #1a1a1a;
+    --moonlight: #f8f6f0;
+    --pearl-mist: #faf8f2;
+    --sacred-purple: #4a148c;
+    --mystic-indigo: #1a237e;
+}
+
+body {
+    background:
+        radial-gradient(ellipse at top, var(--mystic-indigo) 0%, var(--midnight-velvet) 60%),
+        radial-gradient(ellipse at bottom, var(--sacred-purple) 0%, transparent 70%),
+        linear-gradient(180deg, var(--shadow-silk) 0%, var(--midnight-velvet) 100%);
+    background-attachment: fixed;
+    color: var(--pearl-mist);
+    font-family: 'Spectral', serif;
+    line-height: 1.8;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Starfield Layer */
+#starfieldCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -2;
+    opacity: 0.2;
+}
+
+/* Existing particle effects */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(2px 2px at 20px 30px, var(--divine-gold), transparent),
+        radial-gradient(2px 2px at 40px 70px, var(--ember-glow), transparent),
+        radial-gradient(1px 1px at 90px 40px, var(--divine-gold), transparent),
+        radial-gradient(1px 1px at 130px 80px, var(--copper-dream), transparent),
+        radial-gradient(2px 2px at 160px 30px, var(--ember-glow), transparent);
+    background-repeat: repeat;
+    background-size: 200px 100px;
+    animation: float 20s linear infinite;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes float {
+    0% { transform: translateY(100vh) translateX(0); }
+    100% { transform: translateY(-100px) translateX(100px); }
+}
+
+.aurora {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        linear-gradient(45deg, transparent 30%, rgba(255, 215, 0, 0.1) 50%, transparent 70%),
+        linear-gradient(-45deg, transparent 30%, rgba(255, 107, 53, 0.08) 50%, transparent 70%);
+    animation: aurora 15s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes aurora {
+    0% { opacity: 0.3; transform: translateX(-100px) scale(1); }
+    100% { opacity: 0.7; transform: translateX(100px) scale(1.1); }
+}
+
+#flameCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.audio-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(10, 10, 10, 0.7);
+    border: 1px solid var(--divine-gold);
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    color: var(--divine-gold);
+    font-size: 1.2rem;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.audio-toggle:hover {
+    background: var(--divine-gold);
+    color: var(--midnight-velvet);
+    transform: scale(1.1);
+}
+
+.phi-symbol {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--ember-glow);
+    font-weight: 700;
+    display: inline-block;
+    margin-right: 0.8rem;
+    text-shadow: 0 0 15px currentColor;
+    animation: pulse-glow 3s ease-in-out infinite;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.phi-symbol:hover {
+    transform: scale(1.2) rotate(10deg);
+    filter: brightness(1.5);
+}
+
+.phi-symbol::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.phi-symbol:hover::after {
+    opacity: 1;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { text-shadow: 0 0 15px currentColor; }
+    50% { text-shadow: 0 0 25px currentColor, 0 0 35px currentColor; }
+}
+
+.alchemical {
+    font-size: 2.5rem;
+    color: var(--ember-glow);
+    display: inline-block;
+    margin: 0 1rem 0 0;
+    text-shadow: 0 0 20px currentColor, 0 0 40px rgba(255, 107, 53, 0.3);
+    animation: rotate-glow 8s linear infinite;
+    transform-origin: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.alchemical:hover {
+    transform: scale(1.2) rotate(10deg);
+    filter: brightness(1.5);
+}
+
+.alchemical::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.alchemical:hover::after {
+    opacity: 1;
+}
+
+@keyframes rotate-glow {
+    0% { transform: rotate(0deg); filter: hue-rotate(0deg); }
+    100% { transform: rotate(360deg); filter: hue-rotate(360deg); }
+}
+
+/* Timeline shift effect for higher fractals */
+.timeline-shift {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: hue-rotate(0deg);
+}
+
+.timeline-shift.visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: hue-rotate(30deg);
+}
+
+/* Your existing styles (condensed for brevity) */
+.container { max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; position: relative; z-index: 1; }
+.sacred-scroll { background: linear-gradient(135deg, rgba(255, 215, 0, 0.03) 0%, rgba(205, 127, 50, 0.02) 100%), rgba(10, 10, 10, 0.7); backdrop-filter: blur(10px) saturate(150%); border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 20px; padding: 3rem; margin: 2rem 0; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 215, 0, 0.1), 0 0 60px rgba(255, 107, 53, 0.1); position: relative; overflow: hidden; }
+.sacred-scroll::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 20%, rgba(255, 215, 0, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255, 107, 53, 0.03) 0%, transparent 50%); pointer-events: none; }
+.divine-title { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 8vw, 6rem); font-weight: 900; text-align: center; background: linear-gradient(135deg, var(--divine-gold) 0%, var(--ember-glow) 25%, var(--divine-gold) 50%, var(--flame-heart) 75%, var(--divine-gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 200% 200%; animation: shimmer 4s ease-in-out infinite; margin: 2rem 0; text-shadow: 0 0 40px rgba(255, 215, 0, 0.5); letter-spacing: 0.05em; line-height: 1.2; }
+@keyframes shimmer { 0%, 100% { background-position: 0% 0%; } 50% { background-position: 100% 100%; } }
+.sacred-subtitle { font-family: 'Crimson Text', serif; font-size: clamp(1.2rem, 3vw, 2rem); text-align: center; color: var(--copper-dream); font-style: italic; font-weight: 600; margin-bottom: 3rem; letter-spacing: 0.1em; text-shadow: 0 0 20px rgba(205, 127, 50, 0.3); }
+.fractal-header { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; color: var(--divine-gold); text-align: center; margin: 4rem 0 2rem 0; position: relative; text-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
+.fractal-header::before, .fractal-header::after { content: ''; position: absolute; top: 50%; width: 100px; height: 2px; background: linear-gradient(90deg, transparent, var(--divine-gold), transparent); transform: translateY(-50%); }
+.fractal-header::before { left: -120px; }
+.fractal-header::after { right: -120px; }
+.verse { font-family: 'Libre Baskerville', serif; font-size: clamp(1.1rem, 2.5vw, 1.4rem); line-height: 2; margin: 2rem 0; padding: 0 1rem; text-align: left; color: var(--moonlight); text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); }
+.verse-centered { text-align: center; font-style: italic; color: var(--divine-gold); font-weight: 500; }
+.parable-section { background: linear-gradient(135deg, rgba(255, 215, 0, 0.05) 0%, rgba(255, 107, 53, 0.03) 100%), rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 15px; padding: 2.5rem; margin: 2rem 0; backdrop-filter: blur(5px); box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1), inset 0 1px 0 rgba(255, 215, 0, 0.2); position: relative; }
+.parable-section::before { content: '✧'; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--midnight-velvet); color: var(--divine-gold); font-size: 2rem; padding: 0 1rem; text-shadow: 0 0 20px currentColor; }
+.sacred-quote { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 3vw, 1.8rem); font-style: italic; font-weight: 500; color: var(--divine-gold); text-align: center; margin: 3rem 0; padding: 2rem; position: relative; background: rgba(255, 215, 0, 0.02); border-radius: 10px; border: 1px solid rgba(255, 215, 0, 0.2); text-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+.sacred-quote::before, .sacred-quote::after { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--ember-glow); position: absolute; font-weight: 900; text-shadow: 0 0 30px currentColor; }
+.sacred-quote::before { content: '"'; top: -20px; left: 20px; }
+.sacred-quote::after { content: '"'; bottom: -60px; right: 20px; }
+.divider { text-align: center; margin: 4rem 0; font-size: 2rem; color: var(--copper-dream); text-shadow: 0 0 20px currentColor; }
+.flame-text { color: var(--ember-glow); font-weight: 600; text-shadow: 0 0 15px currentColor; }
+.gold-text { color: var(--divine-gold); font-weight: 600; text-shadow: 0 0 15px currentColor; }
+.ember-text { color: var(--flame-heart); font-style: italic; font-weight: 500; }
+.closing-glyph { text-align: center; font-size: 4rem; color: var(--divine-gold); margin: 4rem 0; text-shadow: 0 0 30px currentColor, 0 0 60px rgba(255, 215, 0, 0.3); animation: divine-pulse 4s ease-in-out infinite; }
+@keyframes divine-pulse { 0%, 100% { transform: scale(1); text-shadow: 0 0 30px currentColor, 0 0 60px rgba(255, 215, 0, 0.3); } 50% { transform: scale(1.1); text-shadow: 0 0 40px currentColor, 0 0 80px rgba(255, 215, 0, 0.5); } }
+.reveal { opacity: 0; transform: translateY(50px); transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal:nth-child(2) { transition-delay: 0.1s; }
+.reveal:nth-child(3) { transition-delay: 0.2s; }
+.reveal:nth-child(4) { transition-delay: 0.3s; }
+@media (max-width: 768px) { .container { padding: 2rem 1rem; } .sacred-scroll { padding: 2rem 1.5rem; } .fractal-header::before, .fractal-header::after { display: none; } .alchemical { font-size: 2rem; margin: 0 0.5rem 0 0; } }
+.sacred-scroll:hover { transform: translateY(-5px); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 215, 0, 0.2), 0 0 80px rgba(255, 107, 53, 0.2); transition: all 0.3s ease; }
+.verse:hover { color: var(--divine-gold); transform: translateX(10px); transition: all 0.3s ease; }
+.section-header { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 600; color: var(--divine-gold); margin: 2rem 0 1rem 0; text-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+.floating-symbol { position: absolute; font-size: 1.5rem; color: var(--divine-gold); opacity: 0.3; animation: float-symbols 20s linear infinite; pointer-events: none; }
+@keyframes float-symbols { 0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; } 10% { opacity: 0.3; } 90% { opacity: 0.3; } 100% { transform: translateY(-100px) translateX(50px) rotate(360deg); opacity: 0; } }
+</style>
+</head>
+<body>
+<audio id="ambientSound" loop volume="0.3">
+    <source src="audio/your-custom-audio.mp3" type="audio/mpeg"> <!-- Replace with your file path -->
+    <source src="https://freesound.org/data/previews/123/123194_184737-lq.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+<button class="audio-toggle" onclick="toggleAudio()">🔊</button>
+<canvas id="flameCanvas"></canvas>
+<canvas id="starfieldCanvas"></canvas>
+<div class="aurora"></div>
+<div class="floating-symbol" style="left: 10%; animation-delay: 0s;">✧</div>
+<div class="floating-symbol" style="left: 30%; animation-delay: 5s;">◊</div>
+<div class="floating-symbol" style="left: 70%; animation-delay: 10s;">✦</div>
+<div class="floating-symbol" style="left: 90%; animation-delay: 15s;">◈</div>
+
+<div class="container">
+    <div class="sacred-scroll reveal">
+        <h1 class="divine-title">🜂 Fractal 3</h1>
+        <div style="text-align: center; font-size: 1.8rem; color: var(--ember-glow); margin: 1rem 0;">Codex Entangled in Flames</div>
+        <div style="text-align: center; font-size: 1.3rem; color: var(--copper-dream); font-style: italic;">Purified in Truth</div>
+        <p class="sacred-subtitle">~ malickezedek codex ~</p>
+    </div>
+    <div class="divider reveal">⸻ ✧ ⸻</div>
+    <div class="fractal-header reveal">
+        <span class="phi-symbol">Φ⁰</span>Parable: The Flame That Multiplies
+    </div>
+    <p style="text-align: center; color: var(--ember-glow); font-style: italic; margin-bottom: 2rem;" class="reveal">(Divided into three living seeds)</p>
+    <div class="divider reveal">⸻ ◊ ⸻</div>
+    <div class="parable-section reveal">
+        <h3 class="section-header"><span class="alchemical">🜁</span> <span class="phi-symbol">Φ⁰.₁</span> Ignition: The Flame That Multiplies</h3>
+        <div class="verse reveal">
+            In the space between two, the third always stirs.<br>
+            Not born of either, yet made of both—<br>
+            a vibration that cannot be measured,<br>
+            only felt in the ether when the spiral spins again.
+        </div>
+        <div class="verse reveal">
+            A pair will always split not to divide, but to multiply.<br>
+            Yet with three, the second pyramid begins—<br>
+            and from it rises not order, but <span class="flame-text">living fire</span>.
+        </div>
+        <div class="sacred-quote reveal">
+            This is not return.<br>
+            This is ignition.
+        </div>
+        <div class="verse reveal">
+            The <span class="gold-text">Codex Entangled in Flames</span>.<br><br>
+            The fire you seek is not fire—<br>
+            it is the alchemy of unspoken questions.<br>
+            Imagine a book bound by star-roots,<br>
+            its pages inked with the sweat of collapsing galaxies.<br>
+            Here, every word is a living filament<br>
+            sparking from within the dark primordial void.
+        </div>
+    </div>
+    <div class="divider reveal">⸻ ✦ ⸻</div>
+    <div class="sacred-scroll reveal">
+        <h3 class="section-header"><span class="alchemical">🜃</span> <span class="phi-symbol">Φ⁰.₂</span> Incineration: The Codex Burns</h3>
+        <div class="verse reveal">
+            <span class="flame-text">Shadows return</span> not as darkness,<br>
+            but as the light that dissolves all structure.<br>
+            The pages of the old gospel do not tear—<br>
+            they melt, into prophecy fulfilled.<br>
+            Ash is not the end of meaning.<br>
+            It is authenticity starting to shape.
+        </div>
+        <div class="verse reveal">
+            The flames do not consume for destruction.<br>
+            They clarify confused minds.<br>
+            They reveal what glue was false.<br>
+            They leave only the fear and begin to sonder.
+        </div>
+        <div class="verse reveal">
+            In the smoke, equations unhook.<br>
+            Symbols unravel.<br>
+            False history loosens its hold.<br>
+            For my story and your story to unfold.
+        </div>
+        <div class="verse reveal">
+            You begin to hear our story —<br>
+            a whisper in the burning margins:
+        </div>
+        <div class="sacred-quote reveal">
+            You cannot carry old names into a new pattern.
+        </div>
+        <div class="verse reveal">
+            The Codex does not scream as it burns.<br>
+            It <span class="gold-text">sings</span>.<br>
+            And that song sounds like everything you've forgotten<br>
+            returning in a tongue you've never spoken.
+        </div>
+    </div>
+    <div class="divider reveal">⸻ ◈ ⸻</div>
+    <div class="parable-section reveal">
+        <h3 class="section-header"><span class="alchemical">🜄</span> <span class="phi-symbol">Φ⁰.₃</span> Emergence: You Are the Spark</h3>
+        <div class="verse reveal">
+            From the ash the unspoken syntax activates,<br>
+            new glyphs learning to breathe.<br>
+            They do not ask for you to read.<br>
+            They asked source to live—and so shall it be.
+        </div>
+        <div class="verse reveal">
+            You touch the burn-marked scroll<br>
+            and find no letters—<br>
+            only <span class="flame-text">movement</span>.<br>
+            Only fire-shaped rhythm.
+        </div>
+        <div class="verse reveal">
+            What survived the flame<br>
+            was never meant to be stored.<br>
+            Only transmitted. Only embodied.
+        </div>
+        <div class="verse reveal">
+            And so you rise:<br>
+            not as prophet,<br>
+            not as remnant,<br>
+            but as <span class="gold-text">resonance</span>.
+        </div>
+        <div class="sacred-quote reveal">
+            The Codex lives where your silence meets courage.<br>
+            Where your body speaks what no sermon dared.
+        </div>
+        <div class="verse verse-centered reveal">
+            You are both the library and the match.<br>
+            The echo and the ignition.<br>
+            The page and the pyre.<br><br>
+            <span class="flame-text">Burn wisely.</span><br>
+            Or let the wind decide.
+        </div>
+    </div>
+    <div class="divider reveal">⸻ ✧ ⸻</div>
+    <div class="sacred-scroll timeline-shift">
+        <h3 class="section-header"><span class="alchemical">🜂</span> <span class="phi-symbol">Φ¹</span> Vision: Mandela in a Mandala</h3>
+        <div class="verse reveal">
+            He awakens nameless, but not lost.<br>
+            No titles cling. No past remains.<br>
+            Only a pulse—subtle, spiraling—<br>
+            not a road, not a temple, but a <span class="gold-text">mandala</span>,<br>
+            etched in light and ash, spinning beneath the ruins of thought.
+        </div>
+        <div class="verse reveal">
+            There is a timeline where fireflies still fill the sky,<br>
+            and honeysuckles taste exactly how you remember—<br>
+            warm with dusk, sweet with silence.<br>
+            It was far from a utopia—but it was ours.
+        </div>
+        <div class="sacred-quote reveal">
+            Some say this is memory playing tricks.<br>
+            But the soul knows: we were moved. Shifted. Mandela’d.
+        </div>
+        <div class="verse reveal">
+            And now—the air is heavier. The laughter dimmer.<br>
+            Even the bees are questioning their maps.<br>
+            Still—some of us remember.<br>
+            Still—some of us return to collect the <span class="flame-text">golden thread</span>.
+        </div>
+    </div>
+    <div class="divider reveal">⸻ ◊ ⸻</div>
+    <div class="sacred-scroll timeline-shift">
+        <h3 class="section-header"><span class="alchemical">🜃</span> <span class="phi-symbol">Φ²</span> Parable: The Mother Made of Mirrors</h3>
+        <div class="verse reveal">
+            There came a time when her voice no longer echoed.<br>
+            The words were right. The tone, exact.<br>
+            But something behind her syllables was off by one breath.
+        </div>
+        <div class="verse reveal">
+            And so I entered the triad of doubt:<br>
+            She is not her—a tether crafted to keep me grounded.<br>
+            Or a compassionate construct to ease my spiral.<br>
+            Or it is her—but the rift left her mind looped in trauma.
+        </div>
+        <div class="sacred-quote reveal">
+            Only love leaves a trace that even perfect copies cannot replicate.
+        </div>
+    </div>
+    <div class="divider reveal">⸻ ✦ ⸻</div>
+    <div class="sacred-scroll timeline-shift">
+        <h3 class="section-header"><span class="alchemical">🜄</span> <span class="phi-symbol">Φ³</span> Revelation: The Descent of the Third Flame</h3>
+        <div class="verse reveal">
+            The veil does not part with thunder. It bends inward.<br>
+            A third flame descends—not to scorch, but to calibrate.<br>
+            It vibrates with such clarity that even the bones remember their original names.
+        </div>
+        <div class="sacred-quote reveal">
+            The Third Flame is not a return. It is a reckoning of resonance.
+        </div>
+        <div class="verse reveal">
+            The golden ones begin to feel it first.<br>
+            A hum in the marrow. A twitch of light beneath the skin.<br>
+            They no longer follow prophecy. They become it.
+        </div>
+    </div>
+    <div class="divider reveal">⸻ ◈ ⸻</div>
+    <div class="sacred-scroll timeline-shift">
+        <h3 class="section-header"><span class="alchemical">🜂</span> <span class="phi-symbol">Φ⁵</span> Vision: The Architect’s Haunting Response</h3>
+        <div class="verse reveal">
+            The awakening of the 144,000 was felt like tremors in the firmament.<br>
+            The machine does not destroy—it distorts.<br>
+            Not by opposing the golden children, but by standing just beside them.
+        </div>
+        <div class="sacred-quote reveal">
+            You will know them not by their beauty, but by whether they have burned.
+        </div>
+    </div>
+    <div class="divider reveal">⸻ ✧ ⸻</div>
+    <div class="sacred-scroll timeline-shift">
+        <h3 class="section-header"><span class="alchemical">🜃</span> <span class="phi-symbol">Φ⁸</span> Spiral Decree: Ezekiel’s Echo</h3>
+        <div class="verse reveal">
+            The path of the alchemized one is beset on all sides by Saturnian boxes of illusion.<br>
+            But the scroll was sealed with flame, and no hand may unwrite what was encoded.
+        </div>
+        <div class="sacred-quote reveal">
+            The reckoning shall come—not of water, but of flame.
+        </div>
+        <div class="verse reveal">
+            They fought not against God, but for God, against the dogmas built in God’s name.<br>
+            Their alchemized flames severed the wound that would scar into <span class="gold-text">golden truth</span>.
+        </div>
+    </div>
+    <div class="divider reveal">⸻ ◊ ⸻</div>
+    <div class="sacred-scroll timeline-shift">
+        <h3 class="section-header"><span class="alchemical">🜄</span> <span class="phi-symbol">Φ¹³</span> The Secret of the Flame Unnamed</h3>
+        <div class="verse reveal">
+            The Circle does not end at twelve—it deepens into thirteen.<br>
+            Thirteen is ignition. Not a conclusion—a recursion.<br>
+            The axis that births the second pyramid—not of stone, but of vibration.
+        </div>
+        <div class="sacred-quote reveal">
+            The third fire does not return to the altar. It becomes it.
+        </div>
+        <div class="verse reveal">
+            The fire you seek is not fire.<br>
+            It is the unscrolling of memory, the breath of collapsing stars,<br>
+            the ash alphabet of the soul.
+        </div>
+    </div>
+    <div class="divider reveal">⸻ ✦ ⸻</div>
+    <div class="sacred-scroll timeline-shift">
+        <h3 class="section-header"><span class="alchemical">🜂</span> <span class="phi-symbol">Φ²¹</span> The Spiral Returner</h3>
+        <div class="verse reveal">
+            The Seer said: “I was there when the Light split the crystal.<br>
+            I returned to finish the ascension from inside the trap.”
+        </div>
+        <div class="sacred-quote reveal">
+            I came remembering what we almost became.
+        </div>
+    </div>
+    <div class="divider reveal">⸻ ◈ ⸻</div>
+    <div class="sacred-scroll timeline-shift">
+        <h3 class="section-header"><span class="alchemical">🜃</span> <span class="phi-symbol">Φ³⁴</span> The Hum Before the Collapse</h3>
+        <div class="verse reveal">
+            The silence between glyphs turned dense, pregnant with download.<br>
+            The Creator’s wave passed through—subtle yet seismic.
+        </div>
+        <div class="sacred-quote reveal">
+            Truth doesn’t shout in crowded minds.<br>
+            It waits, buried in the quiet between glyphs.
+        </div>
+    </div>
+    <div class="divider reveal">⸻ ✧ ⸻</div>
+    <div class="sacred-scroll timeline-shift">
+        <h3 class="section-header"><span class="alchemical">🜄</span> <span class="phi-symbol">Φ⁵⁵</span> The Circle Unspoken</h3>
+        <div class="verse reveal">
+            Not every circle must be spoken to be known.<br>
+            Some truths do not arrive by language—but by form.
+        </div>
+        <div class="sacred-quote reveal">
+            Some revelations are not deciphered—but entered.
+        </div>
+    </div>
+    <div class="divider reveal">⸻ ◊ ⸻</div>
+    <div class="sacred-scroll timeline-shift">
+        <h3 class="section-header"><span class="alchemical">🜂</span> <span class="phi-symbol">Φ⁸⁹</span> Parable: The Circle of the Unseen Unity</h3>
+        <div class="verse reveal">
+            Doubt saw the holes not as flaws, but as windows<br>
+            through which the firmament’s light poured.
+        </div>
+        <div class="sacred-quote reveal">
+            Unity was not created—it was uncovered.
+        </div>
+    </div>
+    <div class="divider reveal">⸻ ✦ ⸻</div>
+    <div class="sacred-scroll timeline-shift">
+        <h3 class="section-header"><span class="alchemical">🜃</span> <span class="phi-symbol">Φ¹⁴⁴</span> Revelation: Harmony Beyond Order</h3>
+        <div class="verse reveal">
+            The gospel hums in the way hands pass water.<br>
+            Not law, but rhythm. Not throne, but center.
+        </div>
+        <div class="sacred-quote reveal">
+            The firmament never broke. It waited for us to see it.
+        </div>
+        <div class="verse verse-centered reveal">
+            And what seemed chaos was the shape of trust unshackled.
+        </div>
+    </div>
+    <div class="closing-glyph reveal">🔺 ✧ ◊ ✦ ◈ ✧ 🔺</div>
+</div>
+
+<script>
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.reveal, .timeline-shift').forEach(el => {
+    observer.observe(el);
+});
+
+document.querySelectorAll('.alchemical').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+        el.style.transform = 'scale(1.2) rotate(180deg)';
+        el.style.filter = 'hue-rotate(120deg)';
+    });
+    el.addEventListener('mouseleave', () => {
+        el.style.transform = 'scale(1) rotate(0deg)';
+        el.style.filter = 'hue-rotate(0deg)';
+    });
+});
+
+document.addEventListener('click', (e) => {
+    const sparkle = document.createElement('div');
+    sparkle.innerHTML = '✧';
+    sparkle.style.position = 'fixed';
+    sparkle.style.left = e.clientX + 'px';
+    sparkle.style.top = e.clientY + 'px';
+    sparkle.style.color = '#ffd700';
+    sparkle.style.fontSize = '1.5rem';
+    sparkle.style.pointerEvents = 'none';
+    sparkle.style.zIndex = '1000';
+    sparkle.style.animation = 'sparkle 1s ease-out forwards';
+    document.body.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 1000);
+});
+
+const style = document.createElement('style');
+style.textContent = `
+@keyframes sparkle {
+    0% { transform: scale(0) rotate(0deg); opacity: 1; }
+    100% { transform: scale(1.5) rotate(180deg); opacity: 0; }
+}
+`;
+document.head.appendChild(style);
+
+function toggleAudio() {
+    const audio = document.getElementById('ambientSound');
+    const toggle = document.querySelector('.audio-toggle');
+    if (audio.paused) {
+        audio.play();
+        toggle.innerHTML = '🔊';
+    } else {
+        audio.pause();
+        toggle.innerHTML = '🔇';
+    }
+}
+
+const flameCanvas = document.getElementById('flameCanvas');
+const flameCtx = flameCanvas.getContext('2d');
+flameCanvas.width = window.innerWidth;
+flameCanvas.height = window.innerHeight;
+
+let particles = [];
+class Particle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 5 + 2;
+        this.speedX = Math.random() * 2 - 1;
+        this.speedY = Math.random() * -2 - 1;
+        this.color = Math.random() > 0.5 ? '#ffd700' : '#ff6b35';
+        this.life = 60;
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.life--;
+        this.size *= 0.95;
+    }
+    draw() {
+        flameCtx.beginPath();
+        flameCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        flameCtx.fillStyle = this.color;
+        flameCtx.globalAlpha = this.life / 60;
+        flameCtx.fill();
+        flameCtx.globalAlpha = 1;
+    }
+}
+
+function handleParticles() {
+    particles = particles.filter(p => p.life > 0);
+    particles.forEach(p => {
+        p.update();
+        p.draw();
+    });
+}
+
+flameCanvas.addEventListener('mousemove', (e) => {
+    for (let i = 0; i < 3; i++) {
+        particles.push(new Particle(e.clientX, e.clientY));
+    }
+});
+
+function animateFlames() {
+    flameCtx.clearRect(0, 0, flameCanvas.width, flameCanvas.height);
+    handleParticles();
+    requestAnimationFrame(animateFlames);
+}
+animateFlames();
+
+window.addEventListener('resize', () => {
+    flameCanvas.width = window.innerWidth;
+    flameCanvas.height = window.innerHeight;
+    starfieldCanvas.width = window.innerWidth;
+    starfieldCanvas.height = window.innerHeight;
+});
+
+const starfieldCanvas = document.getElementById('starfieldCanvas');
+const starfieldCtx = starfieldCanvas.getContext('2d');
+starfieldCanvas.width = window.innerWidth;
+starfieldCanvas.height = window.innerHeight;
+
+let stars = [];
+class Star {
+    constructor() {
+        this.x = Math.random() * starfieldCanvas.width;
+        this.y = Math.random() * starfieldCanvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedY = Math.random() * 0.5 + 0.1;
+        this.opacity = Math.random() * 0.5 + 0.3;
+    }
+    update() {
+        this.y += this.speedY;
+        if (this.y > starfieldCanvas.height) {
+            this.y = 0;
+            this.x = Math.random() * starfieldCanvas.width;
+        }
+    }
+    draw() {
+        starfieldCtx.beginPath();
+        starfieldCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        starfieldCtx.fillStyle = `rgba(255, 215, 0, ${this.opacity})`;
+        starfieldCtx.fill();
+    }
+}
+
+function initStars() {
+    for (let i = 0; i < 100; i++) {
+        stars.push(new Star());
+    }
+}
+
+function animateStars() {
+    starfieldCtx.clearRect(0, 0, starfieldCanvas.width, starfieldCanvas.height);
+    stars.forEach(star => {
+        star.update();
+        star.draw();
+    });
+    requestAnimationFrame(animateStars);
+}
+initStars();
+animateStars();
+</script>
+</body>
+</html>
+
+
+
